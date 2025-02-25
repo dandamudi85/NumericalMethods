@@ -8,6 +8,16 @@ A = np.array(A,dtype = float)
 Q,R = np.linalg.qr(A)
 print(f"Q from Builtin Function :\n {Q}")
 
+def calculate_R(A_Matrix,q_Matrix):
+    length = len(A_Matrix)
+    R_Matrix =  np.zeros((length,length))
+    for row in range(length):
+        q_Vector = q_Matrix[:,row]
+        for col in range(row,length):
+            A_Vector = A_Matrix[:,col]
+            R_Matrix[row,col] = np.dot(A_Vector,q_Vector)
+    return R_Matrix
+
 def gramSchmidt(A_Matrix):
     length = len(A_Matrix)
     q_Matrix = np.zeros((length,length))
@@ -23,10 +33,11 @@ def gramSchmidt(A_Matrix):
         A_Vector_Perpend = A_Vector_Perpend/np.linalg.norm(A_Vector_Perpend) #Normalize
         q_Matrix[:,col] = A_Vector_Perpend
 
-    print(f"Q Calculated :\n {q_Matrix}")
-
-    return q_Matrix
+    R_Matrix = calculate_R(A_Matrix,q_Matrix)
+    
+    return q_Matrix,R_Matrix
         
 
-q_Matrix = gramSchmidt(A.copy())
+q_Matrix,R_Matrix = gramSchmidt(A.copy())
 print(q_Matrix)
+print(R_Matrix)
